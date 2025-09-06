@@ -1,41 +1,41 @@
-// screens/LoginScreen.js
+// screens/SignupScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
 import api from '../src/api/api';
 
-export default function LoginScreen({ navigation }) {
+export default function SignupScreen({ navigation }) {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async () => {
-    if (!email || !password) return Alert.alert('Please enter email & password');
+  const handleSignup = async () => {
+    if (!name || !email || !password) return Alert.alert('Please fill all fields');
     setLoading(true);
     try {
-      const res = await api.post('/api/login', { email, password });
+      const res = await api.post('/api/signup', { name, email, password });
       setLoading(false);
       if (res.data && res.data.success) {
-        navigation.replace('Trips', { token: res.data.token });
+        Alert.alert('Success', 'Account created');
+        navigation.replace('Login');
       } else {
-        Alert.alert('Login failed', res.data?.message || 'Invalid credentials');
+        Alert.alert('Signup failed', res.data?.message || 'Error');
       }
     } catch (err) {
       setLoading(false);
-      console.log('login error', err?.response?.data || err.message);
+      console.log('signup error', err?.response?.data || err.message);
       Alert.alert('Error', err.response?.data?.message || 'Could not connect to server');
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Login</Text>
-      <TextInput placeholder="Email" style={styles.input} value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" />
+      <Text style={styles.title}>Signup</Text>
+      <TextInput placeholder="Name" style={styles.input} value={name} onChangeText={setName} />
+      <TextInput placeholder="Email" style={styles.input} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />
       <TextInput placeholder="Password" style={styles.input} value={password} onChangeText={setPassword} secureTextEntry />
-      <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
-        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Login</Text>}
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Signup')} style={{marginTop:12}}>
-        <Text style={{color:'#1f6feb', textAlign:'center'}}>Create an account</Text>
+      <TouchableOpacity style={styles.button} onPress={handleSignup} disabled={loading}>
+        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Signup</Text>}
       </TouchableOpacity>
     </View>
   );
