@@ -1,12 +1,13 @@
-// screens/LoginScreen.js
+// frontend/screens/LoginScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
-import api from '../src/api/api';
+import api, { setAuthToken } from '../src/api/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [email,setEmail] = useState('');
+  const [password,setPassword] = useState('');
+  const [loading,setLoading] = useState(false);
 
   const handleLogin = async () => {
     if (!email || !password) return Alert.alert('Please enter email & password');
@@ -14,15 +15,20 @@ export default function LoginScreen({ navigation }) {
     try {
       const res = await api.post('/api/login', { email, password });
       setLoading(false);
-      if (res.data && res.data.success) {
-        navigation.replace('Trips', { token: res.data.token });
+      if (res.data?.success) {
+        const token = res.data.token;
+        if (token) {
+          await AsyncStorage.setItem('token', token);
+          setAuthToken(token);
+        }
+        navigation.replace('Trips');
       } else {
         Alert.alert('Login failed', res.data?.message || 'Invalid credentials');
       }
     } catch (err) {
       setLoading(false);
-      console.log('login error', err?.response?.data || err.message);
-      Alert.alert('Error', err.response?.data?.message || 'Could not connect to server');
+      console.log('login err', err?.response?.data || err.message);
+      Alert.alert('Error', err?.response?.data?.message || 'Could not connect to server');
     }
   };
 
@@ -34,7 +40,8 @@ export default function LoginScreen({ navigation }) {
       <TouchableOpacity style={styles.button} onPress={handleLogin} disabled={loading}>
         {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Login</Text>}
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Signup')} style={{marginTop:12}}>
+
+      <TouchableOpacity style={{marginTop:12}} onPress={() => navigation.navigate('Signup')}>
         <Text style={{color:'#1f6feb', textAlign:'center'}}>Create an account</Text>
       </TouchableOpacity>
     </View>

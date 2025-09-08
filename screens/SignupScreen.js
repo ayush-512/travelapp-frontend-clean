@@ -1,13 +1,14 @@
-// screens/SignupScreen.js
+// frontend/screens/SignupScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
-import api from '../src/api/api';
+import api, { setAuthToken } from '../src/api/api';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SignupScreen({ navigation }) {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [name,setName] = useState('');
+  const [email,setEmail] = useState('');
+  const [password,setPassword] = useState('');
+  const [loading,setLoading] = useState(false);
 
   const handleSignup = async () => {
     if (!name || !email || !password) return Alert.alert('Please fill all fields');
@@ -15,16 +16,23 @@ export default function SignupScreen({ navigation }) {
     try {
       const res = await api.post('/api/signup', { name, email, password });
       setLoading(false);
-      if (res.data && res.data.success) {
-        Alert.alert('Success', 'Account created');
+      if (res.data?.success) {
+        const token = res.data.token;
+        if (token) {
+          await AsyncStorage.setItem('token', token);
+          setAuthToken(token);
+          navigation.replace('Trips');
+          return;
+        }
+        Alert.alert('Signup successful', 'You can now login');
         navigation.replace('Login');
       } else {
         Alert.alert('Signup failed', res.data?.message || 'Error');
       }
     } catch (err) {
       setLoading(false);
-      console.log('signup error', err?.response?.data || err.message);
-      Alert.alert('Error', err.response?.data?.message || 'Could not connect to server');
+      console.log('signup err', err?.response?.data || err.message);
+      Alert.alert('Error', err?.response?.data?.message || 'Could not connect to server');
     }
   };
 
