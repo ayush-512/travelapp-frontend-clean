@@ -10,6 +10,8 @@ import WelcomeScreen from './screens/WelcomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
 import TripsScreen from './screens/TripsScreen';
+import ProfileScreen from './screens/ProfileScreen';
+import RecommendationsScreen from './screens/RecommendationsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -21,7 +23,7 @@ export default function App() {
       try {
         const token = await AsyncStorage.getItem('token');
         if (token) {
-          setAuthToken(token);
+          await setAuthToken(token);
           setInitialRoute('Trips');
         } else {
           setInitialRoute('Welcome');
@@ -32,13 +34,7 @@ export default function App() {
     })();
   }, []);
 
-  if (!initialRoute) {
-    return (
-      <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
+  if (!initialRoute) return <View style={{flex:1,alignItems:'center',justifyContent:'center'}}><ActivityIndicator/></View>;
 
   return (
     <NavigationContainer>
@@ -47,6 +43,8 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen name="Trips" component={TripsScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="Recommendations" component={RecommendationsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

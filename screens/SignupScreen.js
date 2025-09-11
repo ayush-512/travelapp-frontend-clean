@@ -1,6 +1,6 @@
 // frontend/screens/SignupScreen.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ActivityIndicator, Alert, Image } from 'react-native';
 import api, { setAuthToken } from '../src/api/api';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -38,21 +38,99 @@ export default function SignupScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Signup</Text>
-      <TextInput placeholder="Name" style={styles.input} value={name} onChangeText={setName} />
-      <TextInput placeholder="Email" style={styles.input} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />
-      <TextInput placeholder="Password" style={styles.input} value={password} onChangeText={setPassword} secureTextEntry />
+      {/* App logo */}
+      <Image 
+        source={{ uri: 'https://img.icons8.com/fluency/96/add-user-male.png' }} 
+        style={styles.logo} 
+      />
+
+      <Text style={styles.title}>Create Account</Text>
+
+      <TextInput 
+        placeholder="Full Name" 
+        style={styles.input} 
+        value={name} 
+        onChangeText={setName} 
+        placeholderTextColor="#888"
+      />
+      <TextInput 
+        placeholder="Email" 
+        style={styles.input} 
+        value={email} 
+        onChangeText={setEmail} 
+        keyboardType="email-address" 
+        autoCapitalize="none" 
+        placeholderTextColor="#888"
+      />
+      <TextInput 
+        placeholder="Password" 
+        style={styles.input} 
+        value={password} 
+        onChangeText={setPassword} 
+        secureTextEntry 
+        placeholderTextColor="#888"
+      />
+
       <TouchableOpacity style={styles.button} onPress={handleSignup} disabled={loading}>
-        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Signup</Text>}
+        {loading 
+          ? <ActivityIndicator color="#fff" /> 
+          : <Text style={styles.buttonText}>Sign Up</Text>}
+      </TouchableOpacity>
+
+      <TouchableOpacity style={{marginTop:20}} onPress={() => navigation.navigate('Login')}>
+        <Text style={styles.link}>Already have an account? Login</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container:{flex:1,justifyContent:'center',padding:20},
-  title:{fontSize:28,fontWeight:'700',textAlign:'center',marginBottom:20},
-  input:{borderWidth:1,borderColor:'#ddd',padding:12,borderRadius:8,marginBottom:12},
-  button:{backgroundColor:'#1f6feb',padding:12,borderRadius:8,alignItems:'center'},
-  buttonText:{color:'#fff',fontWeight:'600'}
+  container:{
+    flex:1,
+    justifyContent:'center',
+    alignItems:'center',
+    padding:20,
+    backgroundColor:'#f5f5f5'
+  },
+  logo:{
+    width:90,
+    height:90,
+    marginBottom:20
+  },
+  title:{
+    fontSize:28,
+    fontWeight:'700',
+    marginBottom:20,
+    color:'#333',
+    textAlign:'center'
+  },
+  input:{
+    width:'100%',
+    borderWidth:1,
+    borderColor:'#ccc',
+    backgroundColor:'#fff',
+    padding:14,
+    borderRadius:10,
+    marginBottom:12,
+    fontSize:16
+  },
+  button:{
+    width:'100%',
+    backgroundColor:'#007AFF',
+    padding:15,
+    borderRadius:10,
+    alignItems:'center',
+    marginTop:10,
+    elevation:3
+  },
+  buttonText:{
+    color:'#fff',
+    fontWeight:'600',
+    fontSize:18
+  },
+  link:{
+    color:'#007AFF',
+    fontSize:16,
+    fontWeight:'500'
+  }
 });

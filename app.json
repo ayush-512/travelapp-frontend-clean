@@ -1,13 +1,16 @@
 {
   "expo": {
-    "name": "Travel App",
-    "slug": "travel app",
+    "name": "Veloura",
+    "slug": "Veloura",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
     "scheme": "travelapp",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+    "extra": {
+    "backendUrl": "http://10.232.144.51:3000"
+    },
     "splash": {
       "image": "./assets/images/logo.png",
       "resizeMode": "contain",
