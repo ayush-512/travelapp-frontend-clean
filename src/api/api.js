@@ -13,7 +13,7 @@ const manifestExtra =
 const BASE_URL =
   manifestExtra.backendUrl?.trim() !== ''
     ? manifestExtra.backendUrl
-    : 'http://10.232.144.51:3000'; // 👈 replace with your IPv4 if needed
+    : 'http://10.40.131.51:3000'; // 👈 replace with your IPv4 if needed
 
 // ✅ Create axios instance
 const api = axios.create({

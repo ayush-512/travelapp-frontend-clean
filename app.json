@@ -9,7 +9,10 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "extra": {
-    "backendUrl": "http://10.232.144.51:3000"
+      "backendUrl": "http://10.40.131.51:3000",
+      "eas": {
+        "projectId": "3939878d-9cb2-43be-b1fa-201ebc731473"
+      }
     },
     "splash": {
       "image": "./assets/images/logo.png",
@@ -24,12 +27,14 @@
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.ayush512.Veloura"
     },
     "web": {
       "favicon": "./assets/images/logo.png"
     },
-       "assetBundlePatterns": ["**/*"]
-
+    "assetBundlePatterns": [
+      "**/*"
+    ]
   }
 }
